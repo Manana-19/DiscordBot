@@ -1,31 +1,23 @@
 const {SlashCommandBuilder, EmbedBuilder, Interaction, Client }  = require('discord.js');
-
-module.exports = {
-    name:'ping',
-    description:'Shows the Latency of discord client',
-    cooldown:2,
-    alias:['p'],
-    data: new SlashCommandBuilder()
-        .setName('ping')
-        .setDescription('Shows the latency of discord client')
-        .setDMPermission(false),
-}
+const db = require(`../../scripts/dbConfiguration`);
 
 /**
- * @param {Interaction} interact Interaction to reply from discord
+ * 
  * @param {Client} client Discord Client we're using
+ * @param {Interaction} interaction Interaction to reply from discord
+ * @param {db} db Configured Firestore Database
  */
 
-module.exports.run = async (client, interact) => {
+const run = async (client, interaction, db) => {
     
-    await interact.reply({
+    await interaction.reply({
         embeds:[
             new EmbedBuilder()
                 .setColor('Yellow')
                 .setTitle('Pinging...........')
         ]
     });
-    interact.editReply({
+    interaction.editReply({
         embeds:[
             new EmbedBuilder()
                 .setColor('Green')
@@ -34,5 +26,17 @@ module.exports.run = async (client, interact) => {
                 .setTimestamp()
         ]
     });
+};
 
-}
+module.exports = {
+    name:'ping',
+    description:'Shows the Latency of discord client',
+    cooldown:2,
+    run,
+    alias:['p'],
+    data: new SlashCommandBuilder()
+        .setName('ping')
+        .setDescription('Shows the latency of discord client')
+        .setDMPermission(false)
+        ,
+};

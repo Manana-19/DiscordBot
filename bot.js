@@ -2,6 +2,7 @@
 const { Client, GatewayIntentBits, Events, EmbedBuilder, REST} = require('discord.js');
 const eventHandler = require('./scripts/eventHandler.js');
 const commandHandler = require('./scripts/commandHandler.js');
+const db = require('./scripts/dbConfiguration.js');
 require('dotenv').config();
 
 // Creating the bot client and setting all the required intents
@@ -31,6 +32,6 @@ const rest = new REST({version:'10'}).setToken(process.env.TOKEN);
 
 // When client is up, logging the event and executing all of my handlers
 client.once(Events.ClientReady, (c) => {
-    eventHandler(c, Events);
+    eventHandler(c, Events, db);
     commandHandler(c, rest);
 });
