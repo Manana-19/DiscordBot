@@ -1,6 +1,6 @@
 const {SlashCommandBuilder, EmbedBuilder, Interaction, Client }  = require('discord.js');
 const db = require(`../../scripts/dbConfiguration`);
-
+const emoji = require('../../assets/emoji.json');
 /**
  * 
  * @param {Client} client Discord Client we're using
@@ -32,5 +32,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('userinfo')
         .setDescription(`Show's the info about the user`)
+        .setDMPermission(false)
         .addUserOption((option) => option.setName('userinfo').setDescription('Enter the user')),
 };

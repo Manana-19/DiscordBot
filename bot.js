@@ -1,11 +1,12 @@
 // Importing all the required modules, classes and functions
-const { Client, GatewayIntentBits, Events, EmbedBuilder, REST} = require('discord.js');
+const {} = require('./assets/emoji.json')
+const { Client, GatewayIntentBits, Events, REST} = require('discord.js');
 const eventHandler = require('./scripts/eventHandler.js');
 const commandHandler = require('./scripts/commandHandler.js');
 const db = require('./scripts/dbConfiguration.js');
 require('dotenv').config();
 
-// Creating the bot client and setting all the required intents
+// Creating the bot client and setting all the required intents (basically every intent 🗿)
 const client = new Client({
     intents:[
         GatewayIntentBits.AutoModerationConfiguration,
@@ -21,7 +22,12 @@ const client = new Client({
         GatewayIntentBits.GuildMessageTyping,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildModeration,
-        GatewayIntentBits.GuildPresences
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildScheduledEvents,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildWebhooks
     ],
     allowedMentions:'users',
 });

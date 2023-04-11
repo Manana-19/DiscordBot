@@ -1,6 +1,6 @@
 const {SlashCommandBuilder, EmbedBuilder, Interaction, Client }  = require('discord.js');
 const db = require(`../../scripts/dbConfiguration`);
-
+const emoji = require('../../assets/emoji.json');
 /**
  * 
  * @param {Client} client Discord Client we're using
