@@ -1,4 +1,5 @@
-// Importing firebase and firestore
+// Importing firebase and firestore (and configuration of dotenv too coz it wasn't working)
+require('dotenv').config();
 const admin = require('firebase-admin');
 const { getFirestore } = require('firebase-admin/firestore');
 

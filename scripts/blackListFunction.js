@@ -1,4 +1,4 @@
-const db = require('./scripts/dbConfiguration');
+const db = require('./dbConfiguration.js');
 const { Client, User, Guild } = require('discord.js');
 const {blackListEmbed} = require('../assets/premadeEmbeds.js');
 /**
@@ -66,9 +66,15 @@ const blackListServer = async(client, guildID, reason, db) => {
  * @returns {boolean} true if the user is blacklisted.
  */
 const checkMember = async(client, user, db) => {
-    const restrictedCollection_User = await db.collection('restricted_users').doc(user.id).get();   
-    if (!restrictedCollection_User.exists || restrictedCollection_User.data().restricted === false) return false;
-    if (restrictedCollection_User.data().restricted === true) return true;
+    const restrictedCollection_User = await db.collection('restricted_users').doc(user.id).get();
+    try { 
+        if (!restrictedCollection_User.exists) return false;
+        if (restrictedCollection_User.data().restricted === true) return true;
+        return false;
+    } catch(err) {
+        console.log(err)
+        return false;
+    };
 };
 /**
  * 

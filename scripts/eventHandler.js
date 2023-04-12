@@ -1,6 +1,6 @@
 const {Events, Client, ChannelType} = require('discord.js');
 const db = require('./dbConfiguration.js');
-const { blackListEmbed, ErrorEmbed } = require('../assets/premadeEmbeds.js');
+const { ErrorEmbed } = require('../assets/premadeEmbeds.js');
 const { checkGuild, checkMember } = require('./blackListFunction.js')
 /**
  * 
@@ -18,7 +18,7 @@ module.exports = async (client, events, db) => {
         if (!interaction.isChatInputCommand()) return;
         if (interaction.channel.type === ChannelType.DM) return;
         if (checkGuild(client, interaction.guild, db) === true) return;
-        if (checkMember(client, interaction.user, db)) return;
+        if (checkMember(client, interaction.user, db) === true) return;
 
         // Getting the command from client.commands collection
         const command = interaction.client.commands.get(interaction.commandName);

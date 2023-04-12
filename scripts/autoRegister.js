@@ -9,8 +9,8 @@ const { Client, Guild } = require('discord.js');
  */
 // Creating this function is still work in progress 
 const registerFunction = async(client, guild, db) => {
-    const GuildDB = await db.collection(`serverCollection`).doc(guild.id).collection('config').doc('config_basic');
-    const Data = {
+    const BasicConfig = await db.collection(`serverCollection`).doc(guild.id).collection('config').doc('config_basic');
+    const Data1 = {
         guildName:guild.name,
         ownerID:guild.ownerId,
         createdAt:guild.createdAt,
@@ -21,6 +21,8 @@ const registerFunction = async(client, guild, db) => {
         Moderation_Enable:false,
         logging:false,
     };
-    await GuildDB.add(Data);
+    await BasicConfig.add(Data1);
+
+    // WIP
 };
 module.exports = registerFunction;

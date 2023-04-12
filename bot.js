@@ -1,5 +1,5 @@
 // Importing all the required modules, classes and functions
-const {} = require('./assets/emoji.json')
+const {ErrorEmbed} = require('./assets/premadeEmbeds.js');
 const { Client, GatewayIntentBits, Events, REST} = require('discord.js');
 const eventHandler = require('./scripts/eventHandler.js');
 const commandHandler = require('./scripts/commandHandler.js');
@@ -38,6 +38,14 @@ const rest = new REST({version:'10'}).setToken(process.env.TOKEN);
 
 // When client is up, logging the event and executing all of my handlers
 client.once(Events.ClientReady, (c) => {
-    eventHandler(c, Events, db);
-    commandHandler(c, rest);
+    try {
+        eventHandler(c, Events, db);
+        commandHandler(c, rest);
+    } catch (err) {
+        c.channels.fetch(process.env.ERRID).then((channel) => {
+            channel.send({
+                embeds:[ErrorEmbed.setDescription(`${err}`)]
+            });
+        });
+    };
 });
