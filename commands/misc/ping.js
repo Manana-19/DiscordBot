@@ -32,6 +32,7 @@ module.exports = {
     name:'ping',
     description:'Shows the Latency of discord client',
     cooldown:2,
+    req_perms:'None',
     run,
     alias:['p'],
     data: new SlashCommandBuilder()

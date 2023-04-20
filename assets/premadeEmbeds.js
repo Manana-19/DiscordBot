@@ -22,4 +22,8 @@ const warningEmbed = new EmbedBuilder()
     .setTitle(`${emoji.warn} Warning!!!`)
     .setTimestamp()
     .setFooter({text:footerText})
-module.exports = {ErrorEmbed, successEmbed, blackListEmbed, warningEmbed};
+const actionDMEmbed = new EmbedBuilder()
+    .setColor('Yellow')
+    .setTimestamp()
+    .setFooter({text:footerText})
+module.exports = {ErrorEmbed, successEmbed, blackListEmbed, warningEmbed, actionDMEmbed};

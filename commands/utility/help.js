@@ -1,7 +1,28 @@
 const {SlashCommandBuilder, EmbedBuilder, Interaction, Client } = require('discord.js');
 const db = require(`../../scripts/dbConfiguration.js`);
 const emoji = require('../../assets/emoji.json');
+const path = require('node:path');
 const { ErrorEmbed, successEmbed } = require('../../assets/premadeEmbeds.js');
+const { readdirSync } = require('node:fs');
+
+const dirData = [];
+const misc_data = [];
+const config_data = [];
+const mod_data = [];
+const utility = [];
+const directories = path.join(__dirname, '../');
+let count = 0;
+readdirSync(directories).forEach((dir) => {
+    dirData.push(dir);
+    const newPath = path.join(__dirname, `../${dir}`);
+    readdirSync(newPath).forEach((fileName) => {
+        count++
+        const commands = require(`../${dir}/${fileName}`);
+        const Data = {name:commands.name,description:commands.description};
+        if (dir == 'moderation') mod_data.push(Data)
+        else if (dir == 'configuration') config_data.push(Data)
+    });
+});
 
 /**
  * @param {Client} client Discord Client we're using
@@ -10,7 +31,7 @@ const { ErrorEmbed, successEmbed } = require('../../assets/premadeEmbeds.js');
  */
 
 const run = async (client, interaction, db) => {
-    
+
 };
 // Read All command files and then showing their name and description in option and in embed's option.
 

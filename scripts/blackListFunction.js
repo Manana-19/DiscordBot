@@ -20,11 +20,11 @@ const blackListMember = async(client, userID, reason ,db) => {
     };
     try {
         const restrictedCollection_User = db.collection('restricted_users').doc(userID);
-        await restrictedCollection_User.add(Data);
+        await restrictedCollection_User.set(Data);
         return true;
     } catch(err) {
         console.log(err);
-        return false;
+        return undefined;
     } 
 };
 
@@ -47,7 +47,7 @@ const blackListServer = async(client, guildID, reason, db) => {
     };
     try {
         const restrictedCollection_Guild = db.collection('restricted_guilds').doc(guildID);
-        await restrictedCollection_Guild.add(Data);
+        await restrictedCollection_Guild.set(Data);
         const guild = await client.guilds.fetch(guildID);
         if (guild) {
             guild.leave();
@@ -55,7 +55,7 @@ const blackListServer = async(client, guildID, reason, db) => {
         return true;
     } catch(err) {
         console.log(`Error while blacklisting guild => ${err}`);
-        return false;
+        return undefined;
     };
 };
 /**
@@ -68,12 +68,12 @@ const blackListServer = async(client, guildID, reason, db) => {
 const checkMember = async(client, user, db) => {
     const restrictedCollection_User = await db.collection('restricted_users').doc(user.id).get();
     try { 
-        if (!restrictedCollection_User.exists) return false;
+        if (!restrictedCollection_User.exists) return undefined;
         if (restrictedCollection_User.data().restricted === true) return true;
-        return false;
+        return undefined;
     } catch(err) {
         console.log(err)
-        return false;
+        return undefined;
     };
 };
 /**
@@ -86,7 +86,7 @@ const checkMember = async(client, user, db) => {
 
 const checkGuild = async(client, guild, db) => {
     const restrictedCollection_Guild = await db.collection('restricted_guilds').doc(guild.id).get();
-    if (!restrictedCollection_Guild.exists) return false;
+    if (!restrictedCollection_Guild.exists) return undefined;
     if (restrictedCollection_Guild.data().restricted === true) {
         try {
             (await (await guild.fetchOwner()).createDM()).send({
@@ -99,7 +99,7 @@ const checkGuild = async(client, guild, db) => {
         guild.leave();
         return true;
     };
-    return false;
+    return undefined;
 };
 
 module.exports = {blackListMember, blackListServer, checkMember, checkGuild};

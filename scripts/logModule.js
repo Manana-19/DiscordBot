@@ -1,7 +1,7 @@
 const db = require('./dbConfiguration.js');
 const emoji = require('../assets/emoji.json');
 const {} = require('../assets/premadeEmbeds.js');
-const {Client, Guild, GuildMember, ChannelType, EmbedBuilder} = require('discord.js');
+const {Client, Guild, GuildMember, ChannelType, EmbedBuilder, WebhookClient} = require('discord.js');
 /**
  * 
  * @param {Client} client 
@@ -38,7 +38,15 @@ const ModerationLog = async (client, target, guild, db, user, action, duration ,
         .setTimestamp()
     
         if (duration !== NaN) logEmbed.addFields([{name:'Duration', value:`${duration/60000} Minutes`}])
-        logChannel.send({embeds:[logEmbed]})
+        
+        const webhookClient = new WebhookClient({url:mod_data.get().log_webhook});
+        
+        if (webhookClient) {
+            webhookClient.send({embeds:[logEmbed]});
+        } else {
+            logChannel.send({embeds:[logEmbed]});
+        };
+        
     };
     
     if (mod_data.data().infractionlimit_usage === true) {

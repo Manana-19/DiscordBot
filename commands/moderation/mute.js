@@ -1,7 +1,7 @@
 const {SlashCommandBuilder, EmbedBuilder, Interaction, Client, PermissionFlagsBits } = require('discord.js');
 const db = require(`../../scripts/dbConfiguration.js`);
 const emoji = require('../../assets/emoji.json');
-const { ErrorEmbed, successEmbed } = require('../../assets/premadeEmbeds.js');
+const { ErrorEmbed, successEmbed, actionDMEmbed } = require('../../assets/premadeEmbeds.js');
 const ms = require('../../scripts/ms.js');
 /**
  * 
@@ -25,13 +25,21 @@ const run = async(client, interaction, db) => {
     if (duration === NaN) return interaction.reply({ embeds: [ErrorEmbed.setDescription(`\`The duration input was invalid, please try again!\``)], ephemeral:true});
     if (duration > 86400000*28 || duration < 60000) return interaction.reply({ embeds: [ErrorEmbed.setDescription(`\`The duration input was out of range, please enter the value between 1 minute to 28 days, and try again!\``)], ephemeral:true});
 
-    // Muting the member and logging things
+    // Muting the member, DM'ing them and logging things
     interaction.reply({
         embeds:[
             successEmbed.setDescription(`${target} has been muted\nReason: ${reason}`)
         ],
         ephemeral:true
     });
+    
+    try {
+        target.createDM().then((channel)  => {
+            channel.send({embeds:[actionDMEmbed.setTitle(`You're muted from guild \`${interaction.guild.name}\``).setDescription(`${reason}`).setAuthor({name:interaction.guild.name, iconURL:interaction.guild.iconURL()})]});
+        });
+    } catch (err) {
+        console.log(err)
+    };
     
     target.timeout(duration, reason);
     // Few things are still in WIP....

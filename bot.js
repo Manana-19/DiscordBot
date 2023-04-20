@@ -4,6 +4,7 @@ const { Client, GatewayIntentBits, Events, REST} = require('discord.js');
 const eventHandler = require('./scripts/eventHandler.js');
 const commandHandler = require('./scripts/commandHandler.js');
 const db = require('./scripts/dbConfiguration.js');
+const ErrorNotif = require('./scripts/errScript.js');
 require('dotenv').config();
 
 // Creating the bot client and setting all the required intents (basically every intent 🗿)
@@ -42,10 +43,6 @@ client.once(Events.ClientReady, (c) => {
         eventHandler(c, Events, db);
         commandHandler(c, rest);
     } catch (err) {
-        c.channels.fetch(process.env.ERRID).then((channel) => {
-            channel.send({
-                embeds:[ErrorEmbed.setDescription(`${err}`)]
-            });
-        });
+        ErrorNotif(c, err);
     };
 });

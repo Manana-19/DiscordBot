@@ -1,7 +1,8 @@
 const {Events, Client, ChannelType} = require('discord.js');
 const db = require('./dbConfiguration.js');
 const { ErrorEmbed } = require('../assets/premadeEmbeds.js');
-const { checkGuild, checkMember } = require('./blackListFunction.js')
+const { checkGuild, checkMember } = require('./blackListFunction.js');
+const ErrorNotif = require('./errScript.js');
 /**
  * 
  * @param {Client} client Discord Bot Client
@@ -17,8 +18,8 @@ module.exports = async (client, events, db) => {
         // Filtering the interaction event
         if (!interaction.isChatInputCommand()) return;
         if (interaction.channel.type === ChannelType.DM) return;
-        if (checkGuild(client, interaction.guild, db) === true) return;
-        if (checkMember(client, interaction.user, db) === true) return;
+        if (checkGuild(client, interaction.guild, db)) return;
+        if (checkMember(client, interaction.user, db)) return;
 
         // Getting the command from client.commands collection
         const command = interaction.client.commands.get(interaction.commandName);
@@ -31,6 +32,7 @@ module.exports = async (client, events, db) => {
             command.run(client, interaction, db);
         } catch (err) {
             console.log(`Error caught while executing a command... \n${err}`);
+            ErrorNotif(client, err);
             interaction.reply({
                 embeds:[
                     ErrorEmbed.setDescription(`Error occurred while executing the command`)
