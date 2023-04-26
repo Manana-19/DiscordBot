@@ -1,9 +1,7 @@
 // Importing all the required modules, classes and functions
-const {ErrorEmbed} = require('./assets/premadeEmbeds.js');
 const { Client, GatewayIntentBits, Events, REST} = require('discord.js');
 const eventHandler = require('./scripts/eventHandler.js');
 const commandHandler = require('./scripts/commandHandler.js');
-const db = require('./scripts/dbConfiguration.js');
 const ErrorNotif = require('./scripts/errScript.js');
 require('dotenv').config();
 
@@ -39,8 +37,9 @@ const rest = new REST({version:'10'}).setToken(process.env.TOKEN);
 
 // When client is up, logging the event and executing all of my handlers
 client.once(Events.ClientReady, (c) => {
+    console.clear()
     try {
-        eventHandler(c, Events, db);
+        eventHandler(c, Events);
         commandHandler(c, rest);
     } catch (err) {
         ErrorNotif(c, err);

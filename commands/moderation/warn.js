@@ -1,5 +1,4 @@
 const {SlashCommandBuilder, EmbedBuilder, Interaction, Client, PermissionFlagsBits } = require('discord.js');
-const db = require(`../../scripts/dbConfiguration.js`);
 const emoji = require('../../assets/emoji.json');
 const { ErrorEmbed, successEmbed } = require('../../assets/premadeEmbeds.js');
 
@@ -7,10 +6,9 @@ const { ErrorEmbed, successEmbed } = require('../../assets/premadeEmbeds.js');
  * 
  * @param {Client} client Discord Client we're using
  * @param {Interaction} interaction Interaction to reply from discord
- * @param {db} db Configured Firestore Database
  */
 
-const run = async(client, interaction, db) => {
+const run = async(client, interaction) => {
     // Getting all the required options from the interaction command
     const target = await interaction.guild.members.fetch(interaction.options.getUser('target').id);
     const reason = interaction.options.getString('reason');

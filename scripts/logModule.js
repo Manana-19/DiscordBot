@@ -4,17 +4,16 @@ const {} = require('../assets/premadeEmbeds.js');
 const {Client, Guild, GuildMember, ChannelType, EmbedBuilder, WebhookClient} = require('discord.js');
 /**
  * 
- * @param {Client} client 
+ * @param {Client} client Discord Client
  * @param {GuildMember} target 
  * @param {Guild} guild 
- * @param {db} db 
  * @param {GuildMember} user The moderator
  * @param {String} action
  * @param {Number} duration if Mentioned
  * @param {String} reason
  */
 
-const ModerationLog = async (client, target, guild, db, user, action, duration ,reason) => {
+const ModerationLog = async (client, target, guild, user, action, duration, reason) => {
 
     const ModuleConfig = db.collection('serverCollection').doc(guild.id).collection('config').doc(`config_moderation`);
     const mod_data = await ModuleConfig.get();

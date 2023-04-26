@@ -1,14 +1,12 @@
 const {SlashCommandBuilder, EmbedBuilder, Interaction, Client }  = require('discord.js');
-const db = require(`../../scripts/dbConfiguration`);
 const emoji = require('../../assets/emoji.json');
 /**
  * 
  * @param {Client} client Discord Client we're using
  * @param {Interaction} interaction Interaction to reply from discord
- * @param {db} db Configured Firestore Database
  */
 
-const run = async (client, interaction, db) => {
+const run = async (client, interaction) => {
     
     await interaction.reply({
         embeds:[

@@ -33,7 +33,7 @@ module.exports = async (client, rest) => {
             if (command.data && command.run) {
                 client.commands.set(command.name, command);
                 SlashArray.push(command.data);
-                console.log(command);
+                //console.log(command);
             };
         });
     });
@@ -49,6 +49,6 @@ module.exports = async (client, rest) => {
         console.log(`Successfully registered ${data.length} Application (/) commands`);
     
     } catch (err) {
-        console.log(`Error caught while registering commands\n${err}`);
+        console.error(`Error caught while registering commands\n${err}`);
     };
 };
