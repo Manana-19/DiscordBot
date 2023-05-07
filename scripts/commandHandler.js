@@ -39,16 +39,16 @@ module.exports = async (client, rest) => {
     });
 
     // Beginning the process of registering Slash Commands
-    console.log(`Beginning registering of ${SlashArray.length} Application (/) commands`);
+    console.log(`\x1b[33m Beginning registering of ${SlashArray.length} Application (/) commands. \x1b[0m`);
 
     // Using Try/Catch chain in case we face any errors and log it
     try {
     
         // Registering Slash Commands and then getting the data of how many of our Slash Command(s) have been registered
         const data = await rest.put(Routes.applicationCommands(client.user.id), {body:SlashArray});
-        console.log(`Successfully registered ${data.length} Application (/) commands`);
+        console.log(`\x1b[36m Successfully registered ${data.length} Application (/) commands. \x1b[0m`);
     
     } catch (err) {
-        console.error(`Error caught while registering commands\n${err}`);
+        console.error(`\x1b[31m Error caught while registering commands!\x1b[0m \n${err}`);
     };
 };

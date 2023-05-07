@@ -16,7 +16,8 @@ function ErrorNotif(client, err) {
         .setFooter({iconURL:client.user.displayAvatarURL(),text:client.user.username})
     client.channels.fetch(process.env.ERRID).then((channel) => {
         channel.send({embeds:[errorEmbed]})
-    })
+    });
+    console.error(err);
 };
 
 module.exports = ErrorNotif;

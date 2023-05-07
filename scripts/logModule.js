@@ -1,6 +1,5 @@
 const db = require('./dbConfiguration.js');
 const emoji = require('../assets/emoji.json');
-const {} = require('../assets/premadeEmbeds.js');
 const {Client, Guild, GuildMember, ChannelType, EmbedBuilder, WebhookClient} = require('discord.js');
 /**
  * 
@@ -8,12 +7,17 @@ const {Client, Guild, GuildMember, ChannelType, EmbedBuilder, WebhookClient} = r
  * @param {GuildMember} target 
  * @param {Guild} guild 
  * @param {GuildMember} user The moderator
- * @param {String} action
+ * @param {string} action
  * @param {Number} duration if Mentioned
- * @param {String} reason
+ * @param {string} reason
  */
 
 const ModerationLog = async (client, target, guild, user, action, duration, reason) => {
+
+
+    const confirm = (await db.collection('serverCollection').doc(guild.id).collection('config').doc('config_basic').get()).data()
+    if (confirm.logging !== true) return; 
+
 
     const ModuleConfig = db.collection('serverCollection').doc(guild.id).collection('config').doc(`config_moderation`);
     const mod_data = await ModuleConfig.get();
@@ -21,12 +25,13 @@ const ModerationLog = async (client, target, guild, user, action, duration, reas
     const userData = await userCollection.get();
     const logChannelID = mod_data.data().log_channel;
     const logChannel = await guild.channels.fetch(logChannelID);
+    const logID = (await db.collection('serverCollection').doc(guild.id).collection('log').doc('logCount').get()).data();
 
     if (logChannel) {
 
         const logEmbed = new EmbedBuilder()
-        .setColor('DarkBlue')
-        .setTitle(`Log Trigger: \`Moderation\` => \`${action}\``)
+        .setColor('Yellow')
+        .setTitle(`ID -> ${logID.ID} | Log Trigger: \`Moderation\` => \`${action}\``)
         .setDescription(`Reason:-\n**${reason}**`)
         .addFields([{
                 name:'Moderator',
@@ -51,8 +56,35 @@ const ModerationLog = async (client, target, guild, user, action, duration, reas
     if (mod_data.data().infractionlimit_usage === true) {
         // Infraction System Which is going to be build
     }
+    
+};
+/**
+ * 
+ * @param {Client} client
+ * @param {Guild} guild 
+ * @param {GuildMember} user 
+ * @param {string} action 
+ * @param {string} reason 
+ */
+const updateLog = async(client, user, guild, action, reason) => {
 
+    const confirm = (await db.collection('serverCollection').doc(guild.id).collection('config').doc('config_basic').get()).data()
+    if (confirm.logging !== true) return;
+
+    const logModule = db.collection('serverCollection').doc(guild.id).collection('log');
+    const ID = (await logModule.doc('logCount').get()).data().ID;
     
-    
-    
+    const ModuleConfig = db.collection('serverCollection').doc(guild.id).collection('config').doc(`config_moderation`);
+    const mod_data = await ModuleConfig.get();
+
+    const logChannelID = mod_data.data().log_channel;
+    const logChannel = await guild.channels.fetch(logChannelID);
+
+    if (logChannel) {
+        const webhook = new WebhookClient({url:mod_data.data().log_webhook});
+        if (webhook) {
+            webhook.send()
+        }
+    };
+
 };
